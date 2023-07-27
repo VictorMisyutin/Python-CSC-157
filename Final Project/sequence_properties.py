@@ -44,7 +44,7 @@ def isLinear(seq):
 #linear sequence; false otherwise. 
 def isQuadratic(seq):
 	secondDiff = getDiffs(getDiffs(seq))
-	for i in range(0,len(secondDiff-1)):
+	for i in range(0,len(secondDiff)-1):
 		if secondDiff[i] != secondDiff[i+1]:
 			return False
 	return True
@@ -56,11 +56,11 @@ def isQuadratic(seq):
 # quotients of the elements at indices k + 1 and k of seq  
 def getRatios(seq):
 	list = []
-	for i in range(0,len(seq-1)):
+	for i in range(0,len(seq)-1):
 		current = seq[i+1]/seq[i]
 		current = round(current,5)
 		list.append(current)
-	return current
+	return list
 	
 ### YOU MUST USE THE getRatios FUNCTIONS WHEN ###
 ### IMPLEMENTING THE isGeometric FUNCTION
@@ -85,12 +85,14 @@ def isGeometric(seq):
 # both as float values. The slope should be stored in the list first
 # followed by the vertical intercept
 def getLinearParameters(mx_plus_b):
-	result = []
+	result = [0.0, 0.0]
 	tempList = mx_plus_b.split('+')
 	for i in range(0,len(tempList[0])):
 		if tempList[0][i] == 'x':
 			result[0] = float(tempList[0][0:i])
-	result[1] = float(tempList[1])
+			break
+	if len(tempList) > 1:
+		result[1] = float(tempList[1])
 	return result
 
 ### YOU MUST USE THE getLinearParameters FUNCTION WHEN ###
@@ -104,7 +106,7 @@ def getLinearParameters(mx_plus_b):
 # For example, if seq = [2, 4, 8, 16], and mx_plus_b = "3x-4", then the 
 # return list would be [2, 8, 20, 44]
 def linearTransformation(seq, mx_plus_b):	
-	line = linearTransformation(seq)[0]
+	line = getLinearParameters(mx_plus_b)
 	result = []
 	for i in seq:
 		result.append((i*line[0])+line[1])
@@ -118,9 +120,9 @@ def linearTransformation(seq, mx_plus_b):
 # linear expression in the form mx + b 
 # @return a list containing the terms of the linear sequence
 def linearSequence(num_terms, mx_plus_b):
-	line = getLinearEquation(mx_plus_b)
+	line = getLinearParameters(mx_plus_b)
 	result = []
-	for i in range(0,num_terms):
+	for i in range(1,num_terms+1):
 		result.append((i*line[0])+line[1])
 	return result
 
@@ -131,7 +133,14 @@ def linearSequence(num_terms, mx_plus_b):
 # For example, if seq = [3, 8, 13, 18], then the function would
 # return "5x-2"
 def getLinearEquation(seq):
-	pass
+	result = ""
+	if len(seq) == 2:
+		slope = float(seq[1])-float(seq[0])
+		intersept = 0
+	else:
+		slope = float(seq[2])-float(seq[1])
+		intersept = slope-float(seq[0])
+	return (f"{slope}x + {intersept}")
 	
 
 

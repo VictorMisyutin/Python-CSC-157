@@ -30,13 +30,28 @@ class Arithmetic:
 	# the parameter mx_plus_b, default max terms = 5
 	def reset(self, mx_plus_b = 'x', max_terms = 5):
 		self.max_terms = max_terms
+		self.first_term = 0
+		found = False
 		for i in range(0,len(mx_plus_b)):
 			if mx_plus_b[i] == 'x':
-				self.common_difference = float(mx_plus_b[0:i])
+				if len(mx_plus_b[0:i]) > 1:
+					if mx_plus_b[0] != '-':
+						self.common_difference = float(mx_plus_b[0:i])
+					else:
+						if len(mx_plus_b) >1:
+							self.common_difference = float(mx_plus_b[1:i]) * -1
+				else:
+					if mx_plus_b[0] == '-':
+						self.common_difference = -1
+					else:
+						self.common_difference = 1
 				break
 		for i in range(0,len(mx_plus_b)):
 			if mx_plus_b[i] == '+':
 				self.first_term = float(mx_plus_b[i+1:len(mx_plus_b)])
+		self.first_term += self.common_difference
+				
+		
 		
 	# ****** COMPLETE THE METHOD BELOW
 	# returns the sequence as a list
@@ -44,7 +59,7 @@ class Arithmetic:
 	# @return a list containing the terms of the sequence rounded to 
 	# a precision of 6
 	def asList(self):
-		list = [self]
+		list = [self.first_term]
 		for i in range(1, self.max_terms):
 			current = list[i-1] + self.common_difference
 			list.append(round(current,6))
@@ -75,17 +90,31 @@ class Geometric:
 	# @return void
 	def reset(self, arn = '2^n', max_terms = 5):
 		self.max_terms = max_terms
+		self.common_ratio = 1
+		self.first_term = 1
 		if arn.find('(') != -1:
 			openP = 0
 			for i in range(0,len(arn)):
 				if arn[i] == '(':
 					openP = i
-					self.first_term = float(arn[0:i])
+					if arn[0] == '-':
+						self.first_term = float(arn[1:i]) * -1
+					else:
+						self.first_term = float(arn[0:i])
 				if arn[i]==')':
-					self.common_ratio = float(arn[openP:i].replace('(',''))
+					temp = arn[openP:i].replace('(','')
+					if temp[0] == '-':
+						self.common_ratio = float(temp[1:len(temp)]) * -1
+					else:
+						self.common_ratio = float(temp[0:len(temp)])
 		else:
-			self.first_term = 1
-			self.common_ratio = float(arn.split('^')[0])
+			temp = arn.split('^')[0]
+			if temp[0] == '-':
+				self.first_term = -1
+				self.common_ratio = float(temp[1:len(temp)])
+			else:
+				self.first_term = 1
+				self.common_ratio = float(temp[0:len(temp)])
 	# ****** COMPLETE THE METHOD BELOW	
 	# returns the sequence as a list
 	# @param none 
